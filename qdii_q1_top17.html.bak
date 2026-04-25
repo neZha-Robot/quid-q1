@@ -1,0 +1,3346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>热门QDII基金 2026年Q1持仓全览</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#0b0e1a;color:#e0e0e0;min-height:100vh}
+a{color:#4da3ff;text-decoration:none}
+.hdr{background:linear-gradient(135deg,#0d1b35,#0b0e1a);padding:18px 36px;border-bottom:1px solid #1e2a45;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:20px;color:#fff;font-weight:700}
+.hdr .sub{color:#6b7280;font-size:12px;margin-top:3px}
+.hdr-badge{background:#1e3a5f;color:#4da3ff;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600}
+.srch-bar{max-width:1400px;margin:16px auto 0;padding:0 36px}
+.srch-wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.srch-input{flex:1;min-width:200px;background:#111623;border:1px solid #1e2a45;color:#e0e0e0;padding:9px 14px;border-radius:8px;font-size:14px;outline:none}
+.srch-input:focus{border-color:#4da3ff}
+.srch-input::placeholder{color:#4b5563}
+.srch-btn{background:#1e3a5f;color:#4da3ff;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap}
+.srch-btn:hover{background:#2a4a7f}
+.srch-clear{background:none;color:#6b7280;border:1px solid #1e2a45;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px}
+.srch-clear:hover{color:#e0e0e0;border-color:#4b5563}
+.srch-result{margin-top:10px;font-size:13px;color:#9ca3af;min-height:24px}
+.stock-popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:200;justify-content:center;align-items:flex-start;padding-top:80px;overflow-y:auto}
+.stock-popup.show{display:flex}
+.popup-inner{background:#111623;border:1px solid #1e2a45;border-radius:12px;width:92%;max-width:680px;max-height:76vh;overflow-y:auto}
+.popup-hd{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#111623;z-index:1}
+.popup-hd h3{font-size:15px;color:#fff}
+.popup-close{background:none;border:none;color:#6b7280;font-size:20px;cursor:pointer;padding:0 4px}
+.popup-close:hover{color:#e0e0e0}
+.popup-table{width:100%;border-collapse:collapse;font-size:13px}
+.popup-table th{padding:8px 14px;text-align:left;color:#6b7280;font-size:11px;font-weight:500;border-bottom:1px solid #1e2a45;position:sticky;top:53px;background:#111623}
+.popup-table td{padding:8px 14px;border-bottom:1px solid #1a2035;color:#c5cde0}
+.popup-table tr:hover td{background:#151c32}
+.popup-table .r-high{color:#f04b4b;font-weight:700}
+.popup-table .r-med{color:#f59e0b;font-weight:600}
+.popup-table .r-low{color:#6b7280}
+.scode{font-family:monospace;font-size:12px;color:#6b7280}
+.container{max-width:1400px;margin:0 auto;padding:16px 36px 60px}
+.cat-section{margin-bottom:28px}
+.cat-header{padding:10px 16px;background:#111623;border-radius:8px 8px 0 0;display:flex;align-items:center;gap:10px}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cat-name{font-size:14px;font-weight:700;color:#e0e0e0}
+.cat-count{font-size:12px;color:#6b7280;margin-left:auto}
+.cat-cards{display:flex;flex-direction:column;gap:2px}
+.fund-card{background:#111623;overflow:hidden}
+.fund-card:last-child{border-radius:0 0 8px 8px}
+.fc-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#13192e}
+.fc-title{font-size:14px;font-weight:700;color:#fff}
+.fc-code{font-size:11px;color:#6b7280;background:#1e2538;padding:2px 8px;border-radius:4px}
+.fc-desc{padding:6px 16px 0;font-size:12px;color:#9ca3af;line-height:1.5}
+.fc-sectors{padding:6px 16px 0;display:flex;gap:6px;flex-wrap:wrap}
+.fc-region{padding:6px 16px 8px}
+.stag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#1a2035;color:#9ca3af;border:1px solid #1e2a45}
+.sector-mini{font-size:11px;color:#6b7280;white-space:nowrap}
+.rbar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-bottom:4px}
+.rseg{height:100%;min-width:2px;transition:width 0.3s}
+.rlabels{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#6b7280}
+.tbl-wrap{overflow-x:auto}
+.h-table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+.h-table thead tr{background:#0f1422}
+.h-table th{padding:6px 12px;text-align:left;color:#6b7280;font-size:11px;font-weight:500;border-bottom:1px solid #1e2a45;white-space:nowrap}
+.h-table tbody tr{border-bottom:1px solid #1a2035;transition:background 0.1s}
+.h-table tbody tr:hover{background:#151c32}
+.h-table tbody tr:last-child{border-bottom:none}
+.h-table td{padding:7px 12px;color:#c5cde0;vertical-align:middle}
+.h-table td.rank{color:#6b7280;font-size:12px;width:28px;text-align:center}
+.h-table td.sname{font-weight:600;color:#e0e0e0;cursor:pointer}
+.h-table td.sname:hover{color:#4da3ff;text-decoration:underline}
+.h-table td.ratio{font-weight:700;color:#f0f0f0}
+.h-table td.scode{color:#6b7280;font-size:12px;font-family:monospace}
+.mtag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:11px}
+.mtag.hk{background:#1b3a5e;color:#4da3ff}
+.mtag.us{background:#1b3a2e;color:#34d399}
+.mtag.cn{background:#3a1b1b;color:#f87171}
+.mtag.uk{background:#2e2a1b;color:#fbbf24}
+.mtag.other{background:#1e1e1e;color:#9ca3af}
+.t-up{color:#f04b4b}
+.t-down{color:#28a745}
+.t-new{color:#f59e0b;font-size:11px}
+.t-flat{color:#6b7280}
+.na{color:#6b7280}
+.legend{display:flex;gap:14px;flex-wrap:wrap;padding:12px 20px;background:#111623;border-radius:8px;margin-bottom:18px;font-size:12px;color:#9ca3af}
+.legend-item{display:flex;align-items:center;gap:5px}
+.highlight{background:#1a3a2a !important}
+.highlight td.sname{color:#34d399 !important}
+.footer{text-align:center;color:#4b5563;font-size:12px;margin-top:24px;padding-top:16px;border-top:1px solid #1e2a45}
+@media(max-width:768px){.hdr{padding:14px 14px}.hdr h1{font-size:17px}.container{padding:12px 10px 40px}.srch-bar{padding:0 10px}.h-table{font-size:12px}.h-table th,.h-table td{padding:5px 7px}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <h1>热门QDII基金 · 2026年Q1持仓全览</h1>
+    <div class="sub">共17只基金 · 截止2026-03-31 · 数据来源：Wind资讯 / 基金一季报</div>
+  </div>
+  <div class="hdr-badge">一季报数据</div>
+</div>
+<div class="srch-bar">
+  <div class="srch-wrap">
+    <input class="srch-input" id="srchInput" type="text" placeholder="输入股票名称或代码，查看它在各基金中的持仓占比（如：英伟达、中际旭创、台积电）" />
+    <button class="srch-btn" onclick="doSearch()">搜索</button>
+    <button class="srch-clear" onclick="clearSearch()">清除</button>
+  </div>
+  <div class="srch-result" id="srchResult"></div>
+</div>
+<div class="container">
+  <div class="legend">
+    <div class="legend-item"><span class="mtag hk">港股</span></div>
+    <div class="legend-item"><span class="mtag us">美股</span></div>
+    <div class="legend-item"><span class="mtag cn">A股</span></div>
+    <div class="legend-item"><span class="t-new">★新增</span> 本期新增</div>
+    <div class="legend-item"><span class="t-up">▲</span> 占比上升</div>
+    <div class="legend-item"><span class="t-down">▼</span> 占比下降</div>
+  </div>
+<div class="cat-section">
+  <div class="cat-header" style="border-left:4px solid #4da3ff">
+    <span class="cat-dot" style="background:#4da3ff"></span>
+    <span class="cat-name">美股·半导体全链条</span>
+    <span class="cat-count">2只</span>
+  </div>
+  <div class="cat-cards"><div class="fund-card" data-fund="国富全球科技">
+  <div class="fc-header">
+    <div class="fc-title">国富全球科技</div>
+    <div class="fc-code">021843</div>
+  </div>
+  <div class="fc-desc">聚焦全球半导体产业链，重仓存储芯片、晶圆代工及设备龙头，美股为主</div>
+  <div class="fc-sectors"><span class="stag">晶圆代工 12.0%</span> <span class="stag">半导体设备 11.7%</span> <span class="stag">AI芯片 9.0%</span> <span class="stag">存储芯片 7.7%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#4da3ff" title="美股 58.2%"></div></div><div class="rlabels"><span class="rlabel">美股 58.2%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="美光科技">
+  <td class="rank">1</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">7.69%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.87%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">2</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">7.03%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.07%</span></td>
+</tr>
+<tr data-stock="拉姆研究">
+  <td class="rank">3</td>
+  <td class="sname">拉姆研究</td>
+  <td class="scode">LRCX</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">7.02%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+7.02%</span></td>
+</tr>
+<tr data-stock="康宁">
+  <td class="rank">4</td>
+  <td class="sname">康宁</td>
+  <td class="scode">GLW</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">6.79%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+3.37%</span></td>
+</tr>
+<tr data-stock="谷歌-C">
+  <td class="rank">5</td>
+  <td class="sname">谷歌-C</td>
+  <td class="scode">GOOG</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">6.49%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.48%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">6</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">5.86%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.71%</span></td>
+</tr>
+<tr data-stock="Tower半导体">
+  <td class="rank">7</td>
+  <td class="sname">Tower半导体</td>
+  <td class="scode">TSEM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">5.01%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.41%</span></td>
+</tr>
+<tr data-stock="MKS Inc.">
+  <td class="rank">8</td>
+  <td class="sname">MKS Inc.</td>
+  <td class="scode">MKSI</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">4.68%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.68%</span></td>
+</tr>
+<tr data-stock="TTM科技">
+  <td class="rank">9</td>
+  <td class="sname">TTM科技</td>
+  <td class="scode">TTMI</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体PCB</span></td>
+  <td class="ratio">4.48%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.57%</span></td>
+</tr>
+<tr data-stock="英特尔">
+  <td class="rank">10</td>
+  <td class="sname">英特尔</td>
+  <td class="scode">INTC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.16%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.16%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="长城全球新能源车">
+  <div class="fc-header">
+    <div class="fc-title">长城全球新能源车</div>
+    <div class="fc-code">sh501226</div>
+  </div>
+  <div class="fc-desc">全球新能源车产业链，覆盖芯片、整车、互联网平台，美股为主</div>
+  <div class="fc-sectors"><span class="stag">半导体设备 16.0%</span> <span class="stag">AI芯片 12.4%</span> <span class="stag">消费互联网 11.4%</span> <span class="stag">存储芯片 10.1%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#4da3ff" title="美股 57.4%"></div></div><div class="rlabels"><span class="rlabel">美股 57.4%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="台积电">
+  <td class="rank">1</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">7.44%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.17%</span></td>
+</tr>
+<tr data-stock="阿斯麦">
+  <td class="rank">2</td>
+  <td class="sname">阿斯麦</td>
+  <td class="scode">ASML</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">7.27%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+2.85%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">3</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">6.99%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.71%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">4</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">6.33%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.13%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">5</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">5.95%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.90%</span></td>
+</tr>
+<tr data-stock="博通">
+  <td class="rank">6</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">5.45%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.70%</span></td>
+</tr>
+<tr data-stock="亚马逊">
+  <td class="rank">7</td>
+  <td class="sname">亚马逊</td>
+  <td class="scode">AMZN</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">5.04%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.09%</span></td>
+</tr>
+<tr data-stock="科磊">
+  <td class="rank">8</td>
+  <td class="sname">科磊</td>
+  <td class="scode">KLAC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">4.54%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.24%</span></td>
+</tr>
+<tr data-stock="拉姆研究">
+  <td class="rank">9</td>
+  <td class="sname">拉姆研究</td>
+  <td class="scode">LRCX</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">4.23%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.23%</span></td>
+</tr>
+<tr data-stock="Sandisk Corporation">
+  <td class="rank">10</td>
+  <td class="sname">Sandisk Corporation</td>
+  <td class="scode">SNDK</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">4.20%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.20%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+<div class="cat-section">
+  <div class="cat-header" style="border-left:4px solid #34d399">
+    <span class="cat-dot" style="background:#34d399"></span>
+    <span class="cat-name">美股·半导体上游</span>
+    <span class="cat-count">3只</span>
+  </div>
+  <div class="cat-cards"><div class="fund-card" data-fund="华宝远达">
+  <div class="fc-header">
+    <div class="fc-title">华宝远达</div>
+    <div class="fc-code">017142</div>
+  </div>
+  <div class="fc-desc">A股价值风格，重仓金融、消费、新能源龙头，兼顾港股稀缺标的</div>
+  <div class="fc-sectors"><span class="stag">A股金融 12.4%</span> <span class="stag">新能源 8.5%</span> <span class="stag">其他 7.7%</span> <span class="stag">A股消费 7.6%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#f59e0b" title="A股 39.0%"></div></div><div class="rlabels"><span class="rlabel">A股 39.0%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="宁德时代">
+  <td class="rank">1</td>
+  <td class="sname">宁德时代</td>
+  <td class="scode">300750</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">新能源</span></td>
+  <td class="ratio">5.06%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.06%</span></td>
+</tr>
+<tr data-stock="美的集团">
+  <td class="rank">2</td>
+  <td class="sname">美的集团</td>
+  <td class="scode">000333</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">A股消费</span></td>
+  <td class="ratio">4.75%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.75%</span></td>
+</tr>
+<tr data-stock="招商银行">
+  <td class="rank">3</td>
+  <td class="sname">招商银行</td>
+  <td class="scode">600036</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">A股金融</span></td>
+  <td class="ratio">4.26%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.26%</span></td>
+</tr>
+<tr data-stock="工商银行">
+  <td class="rank">4</td>
+  <td class="sname">工商银行</td>
+  <td class="scode">601398</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">A股金融</span></td>
+  <td class="ratio">4.23%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.23%</span></td>
+</tr>
+<tr data-stock="中信证券">
+  <td class="rank">5</td>
+  <td class="sname">中信证券</td>
+  <td class="scode">600030</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">A股金融</span></td>
+  <td class="ratio">3.92%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.08%</span></td>
+</tr>
+<tr data-stock="国泰海通">
+  <td class="rank">6</td>
+  <td class="sname">国泰海通</td>
+  <td class="scode">601211</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">3.89%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.89%</span></td>
+</tr>
+<tr data-stock="华泰证券">
+  <td class="rank">7</td>
+  <td class="sname">华泰证券</td>
+  <td class="scode">601688</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">3.79%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.18%</span></td>
+</tr>
+<tr data-stock="阳光电源">
+  <td class="rank">8</td>
+  <td class="sname">阳光电源</td>
+  <td class="scode">300274</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">新能源</span></td>
+  <td class="ratio">3.43%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.43%</span></td>
+</tr>
+<tr data-stock="贵州茅台">
+  <td class="rank">9</td>
+  <td class="sname">贵州茅台</td>
+  <td class="scode">600519</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">A股消费</span></td>
+  <td class="ratio">2.87%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.09%</span></td>
+</tr>
+<tr data-stock="新易盛">
+  <td class="rank">10</td>
+  <td class="sname">新易盛</td>
+  <td class="scode">300502</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">2.76%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.76%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="华夏移动互联">
+  <div class="fc-header">
+    <div class="fc-title">华夏移动互联</div>
+    <div class="fc-code">002893</div>
+  </div>
+  <div class="fc-desc">全球移动互联网基础设施，光通信/存储/算力全覆盖，美股为主</div>
+  <div class="fc-sectors"><span class="stag">光通信 16.3%</span> <span class="stag">存储芯片 13.7%</span> <span class="stag">AI芯片 7.6%</span> <span class="stag">其他 5.9%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#4da3ff" title="美股 53.4%"></div></div><div class="rlabels"><span class="rlabel">美股 53.4%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="Coherent Corp.">
+  <td class="rank">1</td>
+  <td class="sname">Coherent Corp.</td>
+  <td class="scode">COHR</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">7.54%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+2.50%</span></td>
+</tr>
+<tr data-stock="Sandisk Corporation">
+  <td class="rank">2</td>
+  <td class="sname">Sandisk Corporation</td>
+  <td class="scode">SNDK</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">7.13%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+7.13%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">3</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">6.58%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.52%</span></td>
+</tr>
+<tr data-stock="Onto Innovation, Inc.">
+  <td class="rank">4</td>
+  <td class="sname">Onto Innovation, Inc.</td>
+  <td class="scode">ONTO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">5.85%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.85%</span></td>
+</tr>
+<tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">5</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">5.79%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.09%</span></td>
+</tr>
+<tr data-stock="康宁">
+  <td class="rank">6</td>
+  <td class="sname">康宁</td>
+  <td class="scode">GLW</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">5.12%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.12%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">7</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.76%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-3.26%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">8</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">4.11%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-4.13%</span></td>
+</tr>
+<tr data-stock="英特尔">
+  <td class="rank">9</td>
+  <td class="sname">英特尔</td>
+  <td class="scode">INTC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.45%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.45%</span></td>
+</tr>
+<tr data-stock="应用光电">
+  <td class="rank">10</td>
+  <td class="sname">应用光电</td>
+  <td class="scode">AAOI</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">3.02%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.02%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="浦银安盛全球">
+  <div class="fc-header">
+    <div class="fc-title">浦银安盛全球</div>
+    <div class="fc-code">006555</div>
+  </div>
+  <div class="fc-desc">全球科技成长，重仓光通信、存储、云计算，美股为主</div>
+  <div class="fc-sectors"><span class="stag">存储芯片 14.0%</span> <span class="stag">光通信 13.4%</span> <span class="stag">消费互联网 9.9%</span> <span class="stag">晶圆代工 6.0%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:92.7%;background:#4da3ff" title="美股 47.3%"></div><div class="rseg" style="width:7.3%;background:#6b7280" title="其他 3.7%"></div></div><div class="rlabels"><span class="rlabel">美股 47.3%</span> <span class="rlabel">其他 3.7%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">1</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">8.22%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+5.27%</span></td>
+</tr>
+<tr data-stock="谷歌-C">
+  <td class="rank">2</td>
+  <td class="sname">谷歌-C</td>
+  <td class="scode">GOOG</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">6.40%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.47%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">3</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">6.04%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.41%</span></td>
+</tr>
+<tr data-stock="西部数据">
+  <td class="rank">4</td>
+  <td class="sname">西部数据</td>
+  <td class="scode">WDC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">5.19%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.19%</span></td>
+</tr>
+<tr data-stock="Coherent Corp.">
+  <td class="rank">5</td>
+  <td class="sname">Coherent Corp.</td>
+  <td class="scode">COHR</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">5.17%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.17%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">6</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">5.13%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.90%</span></td>
+</tr>
+<tr data-stock="英特尔">
+  <td class="rank">7</td>
+  <td class="sname">英特尔</td>
+  <td class="scode">INTC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">4.34%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.34%</span></td>
+</tr>
+<tr data-stock="铠侠控股株式会社">
+  <td class="rank">8</td>
+  <td class="sname">铠侠控股株式会社</td>
+  <td class="scode">铠侠控股株式会社</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">3.71%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.71%</span></td>
+</tr>
+<tr data-stock="奈飞">
+  <td class="rank">9</td>
+  <td class="sname">奈飞</td>
+  <td class="scode">NFLX</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">3.55%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.55%</span></td>
+</tr>
+<tr data-stock="阿斯麦">
+  <td class="rank">10</td>
+  <td class="sname">阿斯麦</td>
+  <td class="scode">ASML</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">3.25%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.25%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+<div class="cat-section">
+  <div class="cat-header" style="border-left:4px solid #f59e0b">
+    <span class="cat-dot" style="background:#f59e0b"></span>
+    <span class="cat-name">美股+A股·半导体上游</span>
+    <span class="cat-count">4只</span>
+  </div>
+  <div class="cat-cards"><div class="fund-card" data-fund="华夏全球科技先锋">
+  <div class="fc-header">
+    <div class="fc-title">华夏全球科技先锋</div>
+    <div class="fc-code">005698</div>
+  </div>
+  <div class="fc-desc">全球科技先锋主题，光通信/半导体设备/AI算力多点布局</div>
+  <div class="fc-sectors"><span class="stag">光通信 19.4%</span> <span class="stag">存储芯片 5.0%</span> <span class="stag">晶圆代工 4.9%</span> <span class="stag">半导体材料 4.2%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#4da3ff" title="美股 36.6%"></div></div><div class="rlabels"><span class="rlabel">美股 36.6%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="Ciena科技">
+  <td class="rank">1</td>
+  <td class="sname">Ciena科技</td>
+  <td class="scode">CIEN</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">5.56%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+4.26%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">2</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">4.87%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.85%</span></td>
+</tr>
+<tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">3</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">4.72%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+2.74%</span></td>
+</tr>
+<tr data-stock="Coherent Corp.">
+  <td class="rank">4</td>
+  <td class="sname">Coherent Corp.</td>
+  <td class="scode">COHR</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">4.59%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+2.65%</span></td>
+</tr>
+<tr data-stock="唯亚威系统服务">
+  <td class="rank">5</td>
+  <td class="sname">唯亚威系统服务</td>
+  <td class="scode">VIAV</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">4.52%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.52%</span></td>
+</tr>
+<tr data-stock="康宁">
+  <td class="rank">6</td>
+  <td class="sname">康宁</td>
+  <td class="scode">GLW</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">4.15%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.15%</span></td>
+</tr>
+<tr data-stock="Sandisk Corporation">
+  <td class="rank">7</td>
+  <td class="sname">Sandisk Corporation</td>
+  <td class="scode">SNDK</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">2.66%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.66%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">8</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">2.30%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.30%</span></td>
+</tr>
+<tr data-stock="先进能源工业">
+  <td class="rank">9</td>
+  <td class="sname">先进能源工业</td>
+  <td class="scode">AEIS</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">1.63%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+1.63%</span></td>
+</tr>
+<tr data-stock="泰瑞达">
+  <td class="rank">10</td>
+  <td class="sname">泰瑞达</td>
+  <td class="scode">TER</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">1.62%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+1.62%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="嘉实全球产业升级">
+  <div class="fc-header">
+    <div class="fc-title">嘉实全球产业升级</div>
+    <div class="fc-code">017731</div>
+  </div>
+  <div class="fc-desc">AI芯片+国产替代双轮驱动，全球产业升级主线</div>
+  <div class="fc-sectors"><span class="stag">AI芯片 20.5%</span> <span class="stag">半导体设备 7.1%</span> <span class="stag">存储芯片 4.9%</span> <span class="stag">其他 4.2%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:80.3%;background:#4da3ff" title="美股 32.2%"></div><div class="rseg" style="width:19.7%;background:#f59e0b" title="A股 7.9%"></div></div><div class="rlabels"><span class="rlabel">美股 32.2%</span> <span class="rlabel">A股 7.9%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="博通">
+  <td class="rank">1</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">5.37%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.16%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">2</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">4.85%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.79%</span></td>
+</tr>
+<tr data-stock="迈威尔科技">
+  <td class="rank">3</td>
+  <td class="sname">迈威尔科技</td>
+  <td class="scode">MRVL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">4.37%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.55%</span></td>
+</tr>
+<tr data-stock="源杰科技">
+  <td class="rank">4</td>
+  <td class="sname">源杰科技</td>
+  <td class="scode">688498</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">4.25%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.25%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">5</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.79%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-3.66%</span></td>
+</tr>
+<tr data-stock="阿斯麦">
+  <td class="rank">6</td>
+  <td class="sname">阿斯麦</td>
+  <td class="scode">ASML</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">3.70%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.11%</span></td>
+</tr>
+<tr data-stock="寒武纪">
+  <td class="rank">7</td>
+  <td class="sname">寒武纪</td>
+  <td class="scode">688256</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.66%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.08%</span></td>
+</tr>
+<tr data-stock="科磊">
+  <td class="rank">8</td>
+  <td class="sname">科磊</td>
+  <td class="scode">KLAC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">3.44%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.44%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">9</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">3.39%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.34%</span></td>
+</tr>
+<tr data-stock="超威半导体">
+  <td class="rank">10</td>
+  <td class="sname">超威半导体</td>
+  <td class="scode">AMD</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.33%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.45%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="易方达全球成长精选">
+  <div class="fc-header">
+    <div class="fc-title">易方达全球成长精选</div>
+    <div class="fc-code">012920</div>
+  </div>
+  <div class="fc-desc">美股科技+A股光模块龙头并重，全球成长精选</div>
+  <div class="fc-sectors"><span class="stag">光通信 19.4%</span> <span class="stag">晶圆代工 12.6%</span> <span class="stag">半导体材料 9.3%</span> <span class="stag">其他 4.5%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:65.6%;background:#4da3ff" title="美股 34.0%"></div><div class="rseg" style="width:34.4%;background:#f59e0b" title="A股 17.9%"></div></div><div class="rlabels"><span class="rlabel">美股 34.0%</span> <span class="rlabel">A股 17.9%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="台积电">
+  <td class="rank">1</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">8.88%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+1.81%</span></td>
+</tr>
+<tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">2</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">8.68%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+3.59%</span></td>
+</tr>
+<tr data-stock="新易盛">
+  <td class="rank">3</td>
+  <td class="sname">新易盛</td>
+  <td class="scode">300502</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">6.02%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.41%</span></td>
+</tr>
+<tr data-stock="中际旭创">
+  <td class="rank">4</td>
+  <td class="sname">中际旭创</td>
+  <td class="scode">300308</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">4.67%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.20%</span></td>
+</tr>
+<tr data-stock="AXT, Inc.">
+  <td class="rank">5</td>
+  <td class="sname">AXT, Inc.</td>
+  <td class="scode">AXTI</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">4.67%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.67%</span></td>
+</tr>
+<tr data-stock="康宁">
+  <td class="rank">6</td>
+  <td class="sname">康宁</td>
+  <td class="scode">GLW</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">4.67%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.67%</span></td>
+</tr>
+<tr data-stock="源杰科技">
+  <td class="rank">7</td>
+  <td class="sname">源杰科技</td>
+  <td class="scode">688498</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">4.49%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.49%</span></td>
+</tr>
+<tr data-stock="Tower半导体">
+  <td class="rank">8</td>
+  <td class="sname">Tower半导体</td>
+  <td class="scode">TSEM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">3.72%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.84%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">9</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">3.36%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.90%</span></td>
+</tr>
+<tr data-stock="东山精密">
+  <td class="rank">10</td>
+  <td class="sname">东山精密</td>
+  <td class="scode">002384</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">电子制造</span></td>
+  <td class="ratio">2.67%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.67%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="天弘全球高端制造">
+  <div class="fc-header">
+    <div class="fc-title">天弘全球高端制造</div>
+    <div class="fc-code">016665</div>
+  </div>
+  <div class="fc-desc">全球高端制造产业链，覆盖AI芯片/光通信/A股电子制造</div>
+  <div class="fc-sectors"><span class="stag">光通信 9.6%</span> <span class="stag">AI芯片 6.7%</span> <span class="stag">晶圆代工 5.5%</span> <span class="stag">电子制造 2.2%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:65.9%;background:#4da3ff" title="美股 17.2%"></div><div class="rseg" style="width:26.3%;background:#f59e0b" title="A股 6.9%"></div><div class="rseg" style="width:7.8%;background:#6b7280" title="其他 2.0%"></div></div><div class="rlabels"><span class="rlabel">美股 17.2%</span> <span class="rlabel">A股 6.9%</span> <span class="rlabel">其他 2.0%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="英伟达">
+  <td class="rank">1</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.65%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.56%</span></td>
+</tr>
+<tr data-stock="博通">
+  <td class="rank">2</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.07%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.73%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">3</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">2.77%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.62%</span></td>
+</tr>
+<tr data-stock="Tower半导体">
+  <td class="rank">4</td>
+  <td class="sname">Tower半导体</td>
+  <td class="scode">TSEM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">2.75%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.78%</span></td>
+</tr>
+<tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">5</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">2.69%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.43%</span></td>
+</tr>
+<tr data-stock="中际旭创">
+  <td class="rank">6</td>
+  <td class="sname">中际旭创</td>
+  <td class="scode">300308</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">2.44%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.44%</span></td>
+</tr>
+<tr data-stock="Coherent Corp.">
+  <td class="rank">7</td>
+  <td class="sname">Coherent Corp.</td>
+  <td class="scode">COHR</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">2.28%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.28%</span></td>
+</tr>
+<tr data-stock="新易盛">
+  <td class="rank">8</td>
+  <td class="sname">新易盛</td>
+  <td class="scode">300502</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">2.23%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.54%</span></td>
+</tr>
+<tr data-stock="胜宏科技">
+  <td class="rank">9</td>
+  <td class="sname">胜宏科技</td>
+  <td class="scode">300476</td>
+  <td><span class="mtag cn">A股</span></td>
+  <td><span class="sector-mini">电子制造</span></td>
+  <td class="ratio">2.21%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.22%</span></td>
+</tr>
+<tr data-stock="日东纺">
+  <td class="rank">10</td>
+  <td class="sname">日东纺</td>
+  <td class="scode">日东纺</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">2.04%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.04%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+<div class="cat-section">
+  <div class="cat-header" style="border-left:4px solid #d946ef">
+    <span class="cat-dot" style="background:#d946ef"></span>
+    <span class="cat-name">美股+亚太·半导体中游</span>
+    <span class="cat-count">5只</span>
+  </div>
+  <div class="cat-cards"><div class="fund-card" data-fund="建信新兴市场">
+  <div class="fc-header">
+    <div class="fc-title">建信新兴市场</div>
+    <div class="fc-code">018147</div>
+  </div>
+  <div class="fc-desc">新兴市场科技龙头，台积电/英伟达/海力士/三星并重</div>
+  <div class="fc-sectors"><span class="stag">存储芯片 24.1%</span> <span class="stag">AI芯片 18.7%</span> <span class="stag">晶圆代工 10.3%</span> <span class="stag">半导体材料 4.3%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:76.0%;background:#4da3ff" title="美股 48.9%"></div><div class="rseg" style="width:24.0%;background:#6b7280" title="其他 15.4%"></div></div><div class="rlabels"><span class="rlabel">美股 48.9%</span> <span class="rlabel">其他 15.4%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="台积电">
+  <td class="rank">1</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">10.26%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+1.19%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">2</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">10.14%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.28%</span></td>
+</tr>
+<tr data-stock="海力士半导体公司">
+  <td class="rank">3</td>
+  <td class="sname">海力士半导体公司</td>
+  <td class="scode">海力士半导体公司</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">8.65%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.14%</span></td>
+</tr>
+<tr data-stock="博通">
+  <td class="rank">4</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">8.52%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.54%</span></td>
+</tr>
+<tr data-stock="三星电子">
+  <td class="rank">5</td>
+  <td class="sname">三星电子</td>
+  <td class="scode">三星电子</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">6.76%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+6.76%</span></td>
+</tr>
+<tr data-stock="Sandisk Corporation">
+  <td class="rank">6</td>
+  <td class="sname">Sandisk Corporation</td>
+  <td class="scode">SNDK</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">4.91%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.91%</span></td>
+</tr>
+<tr data-stock="康宁">
+  <td class="rank">7</td>
+  <td class="sname">康宁</td>
+  <td class="scode">GLW</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体材料</span></td>
+  <td class="ratio">4.29%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.16%</span></td>
+</tr>
+<tr data-stock="西部数据">
+  <td class="rank">8</td>
+  <td class="sname">西部数据</td>
+  <td class="scode">WDC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">3.73%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.73%</span></td>
+</tr>
+<tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">9</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">3.58%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.21%</span></td>
+</tr>
+<tr data-stock="芯源系统">
+  <td class="rank">10</td>
+  <td class="sname">芯源系统</td>
+  <td class="scode">MPWR</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">电源管理</span></td>
+  <td class="ratio">3.49%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.40%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="国富亚洲机会">
+  <div class="fc-header">
+    <div class="fc-title">国富亚洲机会</div>
+    <div class="fc-code">457001</div>
+  </div>
+  <div class="fc-desc">亚洲区域主题，台积电/三星/腾讯/联发科，覆盖台韩港A股</div>
+  <div class="fc-sectors"><span class="stag">晶圆代工 10.4%</span> <span class="stag">存储芯片 9.6%</span> <span class="stag">其他 5.7%</span> <span class="stag">港股互联网 5.0%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:67.1%;background:#6b7280" title="其他 26.4%"></div><div class="rseg" style="width:20.1%;background:#4da3ff" title="美股 7.9%"></div><div class="rseg" style="width:12.8%;background:#34d399" title="港股 5.0%"></div></div><div class="rlabels"><span class="rlabel">其他 26.4%</span> <span class="rlabel">美股 7.9%</span> <span class="rlabel">港股 5.0%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="台积电">
+  <td class="rank">1</td>
+  <td class="sname">台积电</td>
+  <td class="scode">台积电</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">5.48%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.48%</span></td>
+</tr>
+<tr data-stock="三星电子有限公司">
+  <td class="rank">2</td>
+  <td class="sname">三星电子有限公司</td>
+  <td class="scode">三星电子有限公司</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">5.28%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.14%</span></td>
+</tr>
+<tr data-stock="阿里巴巴-W">
+  <td class="rank">3</td>
+  <td class="sname">阿里巴巴-W</td>
+  <td class="scode">09988</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">港股互联网</span></td>
+  <td class="ratio">5.03%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.29%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">4</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">4.89%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.09%</span></td>
+</tr>
+<tr data-stock="海力士半导体公司">
+  <td class="rank">5</td>
+  <td class="sname">海力士半导体公司</td>
+  <td class="scode">海力士半导体公司</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">4.32%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.09%</span></td>
+</tr>
+<tr data-stock="欢聚">
+  <td class="rank">6</td>
+  <td class="sname">欢聚</td>
+  <td class="scode">JOYY</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">3.00%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.63%</span></td>
+</tr>
+<tr data-stock="联发科">
+  <td class="rank">7</td>
+  <td class="sname">联发科</td>
+  <td class="scode">联发科</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">IC设计</span></td>
+  <td class="ratio">2.94%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.94%</span></td>
+</tr>
+<tr data-stock="台达电">
+  <td class="rank">8</td>
+  <td class="sname">台达电</td>
+  <td class="scode">台达电</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">电源管理</span></td>
+  <td class="ratio">2.86%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.50%</span></td>
+</tr>
+<tr data-stock="智邦科技">
+  <td class="rank">9</td>
+  <td class="sname">智邦科技</td>
+  <td class="scode">智邦科技</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">网络通信</span></td>
+  <td class="ratio">2.79%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.57%</span></td>
+</tr>
+<tr data-stock="揖斐电株式会社">
+  <td class="rank">10</td>
+  <td class="sname">揖斐电株式会社</td>
+  <td class="scode">揖斐电株式会社</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">2.73%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.20%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="创金合信全球芯片">
+  <div class="fc-header">
+    <div class="fc-title">创金合信全球芯片</div>
+    <div class="fc-code">017654</div>
+  </div>
+  <div class="fc-desc">全球芯片全产业链，重点配置中芯国际/华虹+ASML/台积电</div>
+  <div class="fc-sectors"><span class="stag">晶圆代工 15.6%</span> <span class="stag">半导体设备 11.5%</span> <span class="stag">电源管理 4.4%</span> <span class="stag">消费互联网 4.4%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:64.6%;background:#4da3ff" title="美股 27.9%"></div><div class="rseg" style="width:35.4%;background:#34d399" title="港股 15.3%"></div></div><div class="rlabels"><span class="rlabel">美股 27.9%</span> <span class="rlabel">港股 15.3%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="中芯国际">
+  <td class="rank">1</td>
+  <td class="sname">中芯国际</td>
+  <td class="scode">00981</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">6.68%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.77%</span></td>
+</tr>
+<tr data-stock="华虹半导体">
+  <td class="rank">2</td>
+  <td class="sname">华虹半导体</td>
+  <td class="scode">01347</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">4.87%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.42%</span></td>
+</tr>
+<tr data-stock="阿斯麦">
+  <td class="rank">3</td>
+  <td class="sname">阿斯麦</td>
+  <td class="scode">ASML</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">4.87%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.87%</span></td>
+</tr>
+<tr data-stock="德州仪器">
+  <td class="rank">4</td>
+  <td class="sname">德州仪器</td>
+  <td class="scode">TXN</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">电源管理</span></td>
+  <td class="ratio">4.44%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.52%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">5</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.38%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+1.29%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">6</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">4.07%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.07%</span></td>
+</tr>
+<tr data-stock="应用材料">
+  <td class="rank">7</td>
+  <td class="sname">应用材料</td>
+  <td class="scode">AMAT</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">4.03%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.03%</span></td>
+</tr>
+<tr data-stock="阿里巴巴-W">
+  <td class="rank">8</td>
+  <td class="sname">阿里巴巴-W</td>
+  <td class="scode">09988</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">港股互联网</span></td>
+  <td class="ratio">3.73%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.11%</span></td>
+</tr>
+<tr data-stock="Lumentum Holdings, Inc.">
+  <td class="rank">9</td>
+  <td class="sname">Lumentum Holdings, Inc.</td>
+  <td class="scode">LITE</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">光通信</span></td>
+  <td class="ratio">3.45%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.45%</span></td>
+</tr>
+<tr data-stock="拉姆研究">
+  <td class="rank">10</td>
+  <td class="sname">拉姆研究</td>
+  <td class="scode">LRCX</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">2.63%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.63%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="摩根全球新兴市场">
+  <div class="fc-header">
+    <div class="fc-title">摩根全球新兴市场</div>
+    <div class="fc-code">378006</div>
+  </div>
+  <div class="fc-desc">全球新兴市场均衡配置，科技+金融并重</div>
+  <div class="fc-sectors"><span class="stag">存储芯片 11.9%</span> <span class="stag">晶圆代工 10.3%</span> <span class="stag">港股互联网 9.5%</span> <span class="stag">印度金融 3.8%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:33.6%;background:#6b7280" title="其他 13.6%"></div><div class="rseg" style="width:29.3%;background:#4da3ff" title="美股 11.9%"></div><div class="rseg" style="width:27.2%;background:#34d399" title="港股 11.1%"></div><div class="rseg" style="width:9.9%;background:#d946ef" title="英股 4.0%"></div></div><div class="rlabels"><span class="rlabel">其他 13.6%</span> <span class="rlabel">美股 11.9%</span> <span class="rlabel">港股 11.1%</span> <span class="rlabel">英股 4.0%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="台积电">
+  <td class="rank">1</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">10.30%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.49%</span></td>
+</tr>
+<tr data-stock="三星电子">
+  <td class="rank">2</td>
+  <td class="sname">三星电子</td>
+  <td class="scode">三星电子</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">7.55%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+1.84%</span></td>
+</tr>
+<tr data-stock="腾讯控股">
+  <td class="rank">3</td>
+  <td class="sname">腾讯控股</td>
+  <td class="scode">00700</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">港股互联网</span></td>
+  <td class="ratio">6.59%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.29%</span></td>
+</tr>
+<tr data-stock="海力士半导体公司">
+  <td class="rank">4</td>
+  <td class="sname">海力士半导体公司</td>
+  <td class="scode">海力士半导体公司</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">4.40%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.40%</span></td>
+</tr>
+<tr data-stock="阿里巴巴-W">
+  <td class="rank">5</td>
+  <td class="sname">阿里巴巴-W</td>
+  <td class="scode">09988</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">港股互联网</span></td>
+  <td class="ratio">2.90%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.65%</span></td>
+</tr>
+<tr data-stock="State Bank of India Sponsored GDR RegS">
+  <td class="rank">6</td>
+  <td class="sname">State Bank of India Sponsored GDR RegS</td>
+  <td class="scode">SBID</td>
+  <td><span class="mtag uk">英股</span></td>
+  <td><span class="sector-mini">印度金融</span></td>
+  <td class="ratio">2.23%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.23%</span></td>
+</tr>
+<tr data-stock="Reliance Industries Ltd Sponsored GDR 144A">
+  <td class="rank">7</td>
+  <td class="sname">Reliance Industries Ltd Sponsored GDR 144A</td>
+  <td class="scode">RIGD</td>
+  <td><span class="mtag uk">英股</span></td>
+  <td><span class="sector-mini">印度能源</span></td>
+  <td class="ratio">1.80%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+1.80%</span></td>
+</tr>
+<tr data-stock="伊塔乌联合银行控股公司">
+  <td class="rank">8</td>
+  <td class="sname">伊塔乌联合银行控股公司</td>
+  <td class="scode">伊塔乌联合银行控股公司</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">巴西金融</span></td>
+  <td class="ratio">1.68%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.13%</span></td>
+</tr>
+<tr data-stock="HDFC银行">
+  <td class="rank">9</td>
+  <td class="sname">HDFC银行</td>
+  <td class="scode">HDB</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">印度金融</span></td>
+  <td class="ratio">1.60%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.42%</span></td>
+</tr>
+<tr data-stock="工商银行">
+  <td class="rank">10</td>
+  <td class="sname">工商银行</td>
+  <td class="scode">01398</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">A股金融</span></td>
+  <td class="ratio">1.57%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+1.57%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="银华海外数字经济">
+  <div class="fc-header">
+    <div class="fc-title">银华海外数字经济</div>
+    <div class="fc-code">016701</div>
+  </div>
+  <div class="fc-desc">海外数字经济主题，美股科技巨头为核心</div>
+  <div class="fc-sectors"><span class="stag">消费互联网 28.3%</span> <span class="stag">AI芯片 17.7%</span> <span class="stag">存储芯片 3.9%</span> <span class="stag">晶圆代工 3.9%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#4da3ff" title="美股 53.8%"></div></div><div class="rlabels"><span class="rlabel">美股 53.8%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="英伟达">
+  <td class="rank">1</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">9.26%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.17%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">2</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">8.06%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.10%</span></td>
+</tr>
+<tr data-stock="苹果">
+  <td class="rank">3</td>
+  <td class="sname">苹果</td>
+  <td class="scode">AAPL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">6.37%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.13%</span></td>
+</tr>
+<tr data-stock="亚马逊">
+  <td class="rank">4</td>
+  <td class="sname">亚马逊</td>
+  <td class="scode">AMZN</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">5.62%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.13%</span></td>
+</tr>
+<tr data-stock="博通">
+  <td class="rank">5</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">4.69%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.16%</span></td>
+</tr>
+<tr data-stock="特斯拉">
+  <td class="rank">6</td>
+  <td class="sname">特斯拉</td>
+  <td class="scode">TSLA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.63%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.64%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">7</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">3.92%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.60%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">8</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">3.90%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.90%</span></td>
+</tr>
+<tr data-stock="超威半导体">
+  <td class="rank">9</td>
+  <td class="sname">超威半导体</td>
+  <td class="scode">AMD</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.71%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.72%</span></td>
+</tr>
+<tr data-stock="微软">
+  <td class="rank">10</td>
+  <td class="sname">微软</td>
+  <td class="scode">MSFT</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">3.64%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-5.20%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+<div class="cat-section">
+  <div class="cat-header" style="border-left:4px solid #22d3ee">
+    <span class="cat-dot" style="background:#22d3ee"></span>
+    <span class="cat-name">科技互联·半导体+下游均衡</span>
+    <span class="cat-count">3只</span>
+  </div>
+  <div class="cat-cards"><div class="fund-card" data-fund="汇添富全球移动">
+  <div class="fc-header">
+    <div class="fc-title">汇添富全球移动</div>
+    <div class="fc-code">015203</div>
+  </div>
+  <div class="fc-desc">全球互联网科技龙头，英伟达/谷歌/微软/亚马逊全覆盖</div>
+  <div class="fc-sectors"><span class="stag">消费互联网 24.8%</span> <span class="stag">AI芯片 12.8%</span> <span class="stag">其他 3.5%</span> <span class="stag">晶圆代工 3.3%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:100.0%;background:#4da3ff" title="美股 46.7%"></div></div><div class="rlabels"><span class="rlabel">美股 46.7%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="英伟达">
+  <td class="rank">1</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">8.96%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.51%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">2</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">8.14%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.27%</span></td>
+</tr>
+<tr data-stock="微软">
+  <td class="rank">3</td>
+  <td class="sname">微软</td>
+  <td class="scode">MSFT</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">5.00%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.49%</span></td>
+</tr>
+<tr data-stock="亚马逊">
+  <td class="rank">4</td>
+  <td class="sname">亚马逊</td>
+  <td class="scode">AMZN</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.84%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.06%</span></td>
+</tr>
+<tr data-stock="苹果">
+  <td class="rank">5</td>
+  <td class="sname">苹果</td>
+  <td class="scode">AAPL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.45%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.10%</span></td>
+</tr>
+<tr data-stock="博通">
+  <td class="rank">6</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.89%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-2.02%</span></td>
+</tr>
+<tr data-stock="Meta Platforms Inc Class A">
+  <td class="rank">7</td>
+  <td class="sname">Meta Platforms Inc Class A</td>
+  <td class="scode">META</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">其他</span></td>
+  <td class="ratio">3.48%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.13%</span></td>
+</tr>
+<tr data-stock="台积电">
+  <td class="rank">8</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">3.34%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.86%</span></td>
+</tr>
+<tr data-stock="奈飞">
+  <td class="rank">9</td>
+  <td class="sname">奈飞</td>
+  <td class="scode">NFLX</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">2.36%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.36%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">10</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">2.21%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+2.21%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="广发全球精选">
+  <div class="fc-header">
+    <div class="fc-title">广发全球精选</div>
+    <div class="fc-code">021277</div>
+  </div>
+  <div class="fc-desc">全球精选成长，美股科技+港股AI新势力均衡配置</div>
+  <div class="fc-sectors"><span class="stag">消费互联网 13.0%</span> <span class="stag">半导体设备 9.2%</span> <span class="stag">AI芯片 7.7%</span> <span class="stag">存储芯片 6.8%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:87.8%;background:#4da3ff" title="美股 36.8%"></div><div class="rseg" style="width:12.2%;background:#34d399" title="港股 5.1%"></div></div><div class="rlabels"><span class="rlabel">美股 36.8%</span> <span class="rlabel">港股 5.1%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="阿斯麦">
+  <td class="rank">1</td>
+  <td class="sname">阿斯麦</td>
+  <td class="scode">ASML</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">5.21%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.21%</span></td>
+</tr>
+<tr data-stock="智谱">
+  <td class="rank">2</td>
+  <td class="sname">智谱</td>
+  <td class="scode">02513</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">港股AI</span></td>
+  <td class="ratio">5.10%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+5.10%</span></td>
+</tr>
+<tr data-stock="谷歌-C">
+  <td class="rank">3</td>
+  <td class="sname">谷歌-C</td>
+  <td class="scode">GOOG</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.94%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.54%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">4</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">4.47%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.20%</span></td>
+</tr>
+<tr data-stock="苹果">
+  <td class="rank">5</td>
+  <td class="sname">苹果</td>
+  <td class="scode">AAPL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.07%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.86%</span></td>
+</tr>
+<tr data-stock="亚马逊">
+  <td class="rank">6</td>
+  <td class="sname">亚马逊</td>
+  <td class="scode">AMZN</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">4.02%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.31%</span></td>
+</tr>
+<tr data-stock="拉姆研究">
+  <td class="rank">7</td>
+  <td class="sname">拉姆研究</td>
+  <td class="scode">LRCX</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">4.01%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.01%</span></td>
+</tr>
+<tr data-stock="Sandisk Corporation">
+  <td class="rank">8</td>
+  <td class="sname">Sandisk Corporation</td>
+  <td class="scode">SNDK</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">3.54%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.83%</span></td>
+</tr>
+<tr data-stock="博通">
+  <td class="rank">9</td>
+  <td class="sname">博通</td>
+  <td class="scode">AVGO</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.27%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-1.17%</span></td>
+</tr>
+<tr data-stock="美光科技">
+  <td class="rank">10</td>
+  <td class="sname">美光科技</td>
+  <td class="scode">MU</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">3.26%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.26%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+<div class="fund-card" data-fund="富国全球科技互联">
+  <div class="fc-header">
+    <div class="fc-title">富国全球科技互联</div>
+    <div class="fc-code">100055</div>
+  </div>
+  <div class="fc-desc">全球科技互联，台积电/英伟达/AMD/ASMPT并重</div>
+  <div class="fc-sectors"><span class="stag">AI芯片 20.9%</span> <span class="stag">晶圆代工 10.1%</span> <span class="stag">半导体设备 9.9%</span> <span class="stag">消费互联网 8.6%</span> </div>
+  <div class="fc-region"><div class="rbar"><div class="rseg" style="width:66.3%;background:#4da3ff" title="美股 43.1%"></div><div class="rseg" style="width:22.3%;background:#34d399" title="港股 14.5%"></div><div class="rseg" style="width:11.5%;background:#6b7280" title="其他 7.4%"></div></div><div class="rlabels"><span class="rlabel">美股 43.1%</span> <span class="rlabel">港股 14.5%</span> <span class="rlabel">其他 7.4%</span> </div></div>
+  <div class="tbl-wrap">
+  <table class="h-table">
+    <thead><tr><th>#</th><th>股票</th><th>代码</th><th>市场</th><th>赛道</th><th>占比</th><th>环比</th></tr></thead>
+    <tbody><tr data-stock="台积电">
+  <td class="rank">1</td>
+  <td class="sname">台积电</td>
+  <td class="scode">TSM</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">晶圆代工</span></td>
+  <td class="ratio">10.06%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.72%</span></td>
+</tr>
+<tr data-stock="英伟达">
+  <td class="rank">2</td>
+  <td class="sname">英伟达</td>
+  <td class="scode">NVDA</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">9.80%</td>
+  <td><span class="t-up">▲</span> <span class="t-up">+0.64%</span></td>
+</tr>
+<tr data-stock="谷歌-A">
+  <td class="rank">3</td>
+  <td class="sname">谷歌-A</td>
+  <td class="scode">GOOGL</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">消费互联网</span></td>
+  <td class="ratio">8.56%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.62%</span></td>
+</tr>
+<tr data-stock="网易云音乐">
+  <td class="rank">4</td>
+  <td class="sname">网易云音乐</td>
+  <td class="scode">09899</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">港股互联网</span></td>
+  <td class="ratio">8.17%</td>
+  <td><span class="t-down">▼</span> <span class="t-down">-0.70%</span></td>
+</tr>
+<tr data-stock="超威半导体">
+  <td class="rank">5</td>
+  <td class="sname">超威半导体</td>
+  <td class="scode">AMD</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">7.40%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+7.40%</span></td>
+</tr>
+<tr data-stock="ASMPT">
+  <td class="rank">6</td>
+  <td class="sname">ASMPT</td>
+  <td class="scode">00522</td>
+  <td><span class="mtag hk">港股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">6.29%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+6.29%</span></td>
+</tr>
+<tr data-stock="海力士半导体公司">
+  <td class="rank">7</td>
+  <td class="sname">海力士半导体公司</td>
+  <td class="scode">海力士半导体公司</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">4.11%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+4.11%</span></td>
+</tr>
+<tr data-stock="英特尔">
+  <td class="rank">8</td>
+  <td class="sname">英特尔</td>
+  <td class="scode">INTC</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">AI芯片</span></td>
+  <td class="ratio">3.66%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.66%</span></td>
+</tr>
+<tr data-stock="阿斯麦">
+  <td class="rank">9</td>
+  <td class="sname">阿斯麦</td>
+  <td class="scode">ASML</td>
+  <td><span class="mtag us">美股</span></td>
+  <td><span class="sector-mini">半导体设备</span></td>
+  <td class="ratio">3.58%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.58%</span></td>
+</tr>
+<tr data-stock="三星电子">
+  <td class="rank">10</td>
+  <td class="sname">三星电子</td>
+  <td class="scode">三星电子</td>
+  <td><span class="mtag other">其他</span></td>
+  <td><span class="sector-mini">存储芯片</span></td>
+  <td class="ratio">3.33%</td>
+  <td><span class="t-new">★新增</span> <span class="t-up">+3.33%</span></td>
+</tr>
+</tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+  <div class="footer">数据来源：Wind资讯 / 各基金2026年一季报 · 整理：WorkBuddy · 2026-04-25</div>
+</div>
+<div class="stock-popup" id="stockPopup">
+  <div class="popup-inner">
+    <div class="popup-hd">
+      <h3 id="popupTitle">股票持仓详情</h3>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <table class="popup-table" id="popupTable">
+      <thead><tr><th>基金</th><th>持仓占比</th><th>代码</th><th>市场</th></tr></thead>
+      <tbody id="popupBody"></tbody>
+    </table>
+  </div>
+</div>
+<script>
+const STOCK_DATA = {
+  "美光科技": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 7.6899999999999995,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏移动互联",
+      "ratio": 6.58,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 5.949999999999999,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 5.13,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 4.8500000000000005,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 3.92,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 3.26,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 2.3,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 2.21,
+      "code": "MU",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "MU",
+      "market": "--"
+    }
+  ],
+  "台积电": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 10.299999999999999,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "建信新兴市场",
+      "ratio": 10.26,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 10.059999999999999,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 8.88,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 7.4399999999999995,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "国富全球科技",
+      "ratio": 7.03,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 6.04,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 5.48,
+      "code": "台积电",
+      "market": "--"
+    },
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 4.89,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 4.87,
+      "code": "TSM",
+      "market": "美国证券交易所"
+    }
+  ],
+  "拉姆研究": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 7.02,
+      "code": "LRCX",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 4.2299999999999995,
+      "code": "LRCX",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 4.01,
+      "code": "LRCX",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 2.63,
+      "code": "LRCX",
+      "market": "美国证券交易所"
+    }
+  ],
+  "康宁": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 6.79,
+      "code": "GLW",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏移动互联",
+      "ratio": 5.12,
+      "code": "GLW",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 4.67,
+      "code": "GLW",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "建信新兴市场",
+      "ratio": 4.29,
+      "code": "GLW",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 4.15,
+      "code": "GLW",
+      "market": "美国证券交易所"
+    }
+  ],
+  "谷歌-C": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 6.49,
+      "code": "GOOG",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 6.4,
+      "code": "GOOG",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 4.9399999999999995,
+      "code": "GOOG",
+      "market": "美国证券交易所"
+    }
+  ],
+  "英伟达": [
+    {
+      "fund": "建信新兴市场",
+      "ratio": 10.14,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 9.8,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 9.26,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 8.959999999999999,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 6.99,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "国富全球科技",
+      "ratio": 5.86,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 4.47,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏移动互联",
+      "ratio": 4.109999999999999,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 3.7900000000000005,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 3.65,
+      "code": "NVDA",
+      "market": "美国证券交易所"
+    }
+  ],
+  "Tower半导体": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 5.01,
+      "code": "TSEM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 3.7199999999999998,
+      "code": "TSEM",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.75,
+      "code": "TSEM",
+      "market": "美国证券交易所"
+    }
+  ],
+  "MKS Inc.": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 4.68,
+      "code": "MKSI",
+      "market": "美国证券交易所"
+    }
+  ],
+  "TTM科技": [
+    {
+      "fund": "国富全球科技",
+      "ratio": 4.4799999999999995,
+      "code": "TTMI",
+      "market": "美国证券交易所"
+    }
+  ],
+  "英特尔": [
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 4.34,
+      "code": "INTC",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 3.66,
+      "code": "INTC",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏移动互联",
+      "ratio": 3.45,
+      "code": "INTC",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "国富全球科技",
+      "ratio": 3.16,
+      "code": "INTC",
+      "market": "美国证券交易所"
+    }
+  ],
+  "阿斯麦": [
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 7.2700000000000005,
+      "code": "ASML",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 5.21,
+      "code": "ASML",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 4.87,
+      "code": "ASML",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 3.6999999999999997,
+      "code": "ASML",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 3.58,
+      "code": "ASML",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 3.25,
+      "code": "ASML",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "ASML",
+      "market": "--"
+    }
+  ],
+  "谷歌-A": [
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 8.559999999999999,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 8.14,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 8.06,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 6.329999999999999,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏移动互联",
+      "ratio": 4.760000000000001,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 4.38,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 3.36,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 0.02,
+      "code": "GOOGL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "GOOGL",
+      "market": "--"
+    }
+  ],
+  "博通": [
+    {
+      "fund": "建信新兴市场",
+      "ratio": 8.52,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 5.45,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 5.37,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 4.6899999999999995,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 3.8899999999999997,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 3.27,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 3.0700000000000003,
+      "code": "AVGO",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "AVGO",
+      "market": "--"
+    }
+  ],
+  "亚马逊": [
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 5.62,
+      "code": "AMZN",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 5.04,
+      "code": "AMZN",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 4.84,
+      "code": "AMZN",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 4.02,
+      "code": "AMZN",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "AMZN",
+      "market": "--"
+    }
+  ],
+  "科磊": [
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 4.54,
+      "code": "KLAC",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 3.44,
+      "code": "KLAC",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "KLAC",
+      "market": "--"
+    }
+  ],
+  "Sandisk Corporation": [
+    {
+      "fund": "华夏移动互联",
+      "ratio": 7.13,
+      "code": "SNDK",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "建信新兴市场",
+      "ratio": 4.91,
+      "code": "SNDK",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 4.2,
+      "code": "SNDK",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 3.54,
+      "code": "SNDK",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 2.6599999999999997,
+      "code": "SNDK",
+      "market": "美国证券交易所"
+    }
+  ],
+  "泛林集团": [
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "LRCX",
+      "market": "--"
+    }
+  ],
+  "闪迪": [
+    {
+      "fund": "长城全球新能源车",
+      "ratio": 0,
+      "code": "SNDK",
+      "market": "--"
+    }
+  ],
+  "宁德时代": [
+    {
+      "fund": "华宝远达",
+      "ratio": 5.06,
+      "code": "300750",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "美的集团": [
+    {
+      "fund": "华宝远达",
+      "ratio": 4.75,
+      "code": "000333",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "招商银行": [
+    {
+      "fund": "华宝远达",
+      "ratio": 4.26,
+      "code": "600036",
+      "market": "上海证券交易所"
+    }
+  ],
+  "工商银行": [
+    {
+      "fund": "华宝远达",
+      "ratio": 4.2299999999999995,
+      "code": "601398",
+      "market": "上海证券交易所"
+    },
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 1.5699999999999998,
+      "code": "01398",
+      "market": "香港联合交易所"
+    }
+  ],
+  "中信证券": [
+    {
+      "fund": "华宝远达",
+      "ratio": 3.92,
+      "code": "600030",
+      "market": "上海证券交易所"
+    }
+  ],
+  "国泰海通": [
+    {
+      "fund": "华宝远达",
+      "ratio": 3.8899999999999997,
+      "code": "601211",
+      "market": "上海证券交易所"
+    }
+  ],
+  "华泰证券": [
+    {
+      "fund": "华宝远达",
+      "ratio": 3.7900000000000005,
+      "code": "601688",
+      "market": "上海证券交易所"
+    }
+  ],
+  "阳光电源": [
+    {
+      "fund": "华宝远达",
+      "ratio": 3.4299999999999997,
+      "code": "300274",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "贵州茅台": [
+    {
+      "fund": "华宝远达",
+      "ratio": 2.87,
+      "code": "600519",
+      "market": "上海证券交易所"
+    }
+  ],
+  "新易盛": [
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 6.02,
+      "code": "300502",
+      "market": "深圳证券交易所"
+    },
+    {
+      "fund": "华宝远达",
+      "ratio": 2.76,
+      "code": "300502",
+      "market": "深圳证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.23,
+      "code": "300502",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "Coherent Corp.": [
+    {
+      "fund": "华夏移动互联",
+      "ratio": 7.539999999999999,
+      "code": "COHR",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 5.17,
+      "code": "COHR",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 4.590000000000001,
+      "code": "COHR",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.2800000000000002,
+      "code": "COHR",
+      "market": "美国证券交易所"
+    }
+  ],
+  "Onto Innovation, Inc.": [
+    {
+      "fund": "华夏移动互联",
+      "ratio": 5.8500000000000005,
+      "code": "ONTO",
+      "market": "美国证券交易所"
+    }
+  ],
+  "Lumentum Holdings, Inc.": [
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 8.68,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 8.219999999999999,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏移动互联",
+      "ratio": 5.79,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 4.72,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "建信新兴市场",
+      "ratio": 3.58,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 3.45,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.69,
+      "code": "LITE",
+      "market": "美国证券交易所"
+    }
+  ],
+  "应用光电": [
+    {
+      "fund": "华夏移动互联",
+      "ratio": 3.02,
+      "code": "AAOI",
+      "market": "美国证券交易所"
+    }
+  ],
+  "西部数据": [
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 5.19,
+      "code": "WDC",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "建信新兴市场",
+      "ratio": 3.73,
+      "code": "WDC",
+      "market": "美国证券交易所"
+    }
+  ],
+  "铠侠控股株式会社": [
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 3.71,
+      "code": "铠侠控股株式会社",
+      "market": "--"
+    }
+  ],
+  "奈飞": [
+    {
+      "fund": "浦银安盛全球",
+      "ratio": 3.55,
+      "code": "NFLX",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 2.36,
+      "code": "NFLX",
+      "market": "美国证券交易所"
+    }
+  ],
+  "Ciena科技": [
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 5.56,
+      "code": "CIEN",
+      "market": "美国证券交易所"
+    }
+  ],
+  "唯亚威系统服务": [
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 4.52,
+      "code": "VIAV",
+      "market": "美国证券交易所"
+    }
+  ],
+  "先进能源工业": [
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 1.63,
+      "code": "AEIS",
+      "market": "美国证券交易所"
+    }
+  ],
+  "泰瑞达": [
+    {
+      "fund": "华夏全球科技先锋",
+      "ratio": 1.6199999999999999,
+      "code": "TER",
+      "market": "美国证券交易所"
+    }
+  ],
+  "迈威尔科技": [
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 4.37,
+      "code": "MRVL",
+      "market": "美国证券交易所"
+    }
+  ],
+  "源杰科技": [
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 4.49,
+      "code": "688498",
+      "market": "上海证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 4.25,
+      "code": "688498",
+      "market": "上海证券交易所"
+    }
+  ],
+  "寒武纪": [
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 3.66,
+      "code": "688256",
+      "market": "上海证券交易所"
+    }
+  ],
+  "超威半导体": [
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 7.3999999999999995,
+      "code": "AMD",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 3.71,
+      "code": "AMD",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "嘉实全球产业升级",
+      "ratio": 3.3300000000000005,
+      "code": "AMD",
+      "market": "美国证券交易所"
+    }
+  ],
+  "中际旭创": [
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 4.67,
+      "code": "300308",
+      "market": "深圳证券交易所"
+    },
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.44,
+      "code": "300308",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "AXT, Inc.": [
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 4.67,
+      "code": "AXTI",
+      "market": "美国证券交易所"
+    }
+  ],
+  "东山精密": [
+    {
+      "fund": "易方达全球成长精选",
+      "ratio": 2.67,
+      "code": "002384",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "胜宏科技": [
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.21,
+      "code": "300476",
+      "market": "深圳证券交易所"
+    }
+  ],
+  "日东纺": [
+    {
+      "fund": "天弘全球高端制造",
+      "ratio": 2.04,
+      "code": "日东纺",
+      "market": "--"
+    }
+  ],
+  "海力士半导体公司": [
+    {
+      "fund": "建信新兴市场",
+      "ratio": 8.649999999999999,
+      "code": "海力士半导体公司",
+      "market": "--"
+    },
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 4.3999999999999995,
+      "code": "海力士半导体公司",
+      "market": "--"
+    },
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 4.32,
+      "code": "海力士半导体公司",
+      "market": "--"
+    },
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 4.109999999999999,
+      "code": "海力士半导体公司",
+      "market": "--"
+    }
+  ],
+  "三星电子": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 7.55,
+      "code": "三星电子",
+      "market": "--"
+    },
+    {
+      "fund": "建信新兴市场",
+      "ratio": 6.76,
+      "code": "三星电子",
+      "market": "--"
+    },
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 3.3300000000000005,
+      "code": "三星电子",
+      "market": "--"
+    }
+  ],
+  "芯源系统": [
+    {
+      "fund": "建信新兴市场",
+      "ratio": 3.49,
+      "code": "MPWR",
+      "market": "美国证券交易所"
+    }
+  ],
+  "三星电子有限公司": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 5.28,
+      "code": "三星电子有限公司",
+      "market": "--"
+    }
+  ],
+  "阿里巴巴-W": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 5.029999999999999,
+      "code": "09988",
+      "market": "香港联合交易所"
+    },
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 3.73,
+      "code": "09988",
+      "market": "香港联合交易所"
+    },
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 2.9000000000000004,
+      "code": "09988",
+      "market": "香港联合交易所"
+    }
+  ],
+  "欢聚": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 3.0,
+      "code": "JOYY",
+      "market": "美国证券交易所"
+    }
+  ],
+  "联发科": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 2.94,
+      "code": "联发科",
+      "market": "--"
+    }
+  ],
+  "台达电": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 2.86,
+      "code": "台达电",
+      "market": "--"
+    }
+  ],
+  "智邦科技": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 2.79,
+      "code": "智邦科技",
+      "market": "--"
+    }
+  ],
+  "揖斐电株式会社": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 2.73,
+      "code": "揖斐电株式会社",
+      "market": "--"
+    }
+  ],
+  "LG Energy Solution Ltd": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 2.6,
+      "code": "LG Energy Solution Ltd",
+      "market": "--"
+    }
+  ],
+  "LG新能源": [
+    {
+      "fund": "国富亚洲机会",
+      "ratio": 2.6,
+      "code": "LG新能源",
+      "market": "--"
+    }
+  ],
+  "中芯国际": [
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 6.68,
+      "code": "00981",
+      "market": "香港联合交易所"
+    }
+  ],
+  "华虹半导体": [
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 4.87,
+      "code": "01347",
+      "market": "香港联合交易所"
+    }
+  ],
+  "德州仪器": [
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 4.44,
+      "code": "TXN",
+      "market": "美国证券交易所"
+    }
+  ],
+  "应用材料": [
+    {
+      "fund": "创金合信全球芯片",
+      "ratio": 4.03,
+      "code": "AMAT",
+      "market": "美国证券交易所"
+    }
+  ],
+  "腾讯控股": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 6.59,
+      "code": "00700",
+      "market": "香港联合交易所"
+    }
+  ],
+  "State Bank of India Sponsored GDR RegS": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 2.23,
+      "code": "SBID",
+      "market": "英国证券交易所"
+    }
+  ],
+  "Reliance Industries Ltd Sponsored GDR 144A": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 1.7999999999999998,
+      "code": "RIGD",
+      "market": "英国证券交易所"
+    }
+  ],
+  "伊塔乌联合银行控股公司": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 1.68,
+      "code": "伊塔乌联合银行控股公司",
+      "market": "--"
+    }
+  ],
+  "HDFC银行": [
+    {
+      "fund": "摩根全球新兴市场",
+      "ratio": 1.6,
+      "code": "HDB",
+      "market": "美国证券交易所"
+    }
+  ],
+  "苹果": [
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 6.370000000000001,
+      "code": "AAPL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 4.45,
+      "code": "AAPL",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "广发全球精选",
+      "ratio": 4.07,
+      "code": "AAPL",
+      "market": "美国证券交易所"
+    }
+  ],
+  "特斯拉": [
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 4.63,
+      "code": "TSLA",
+      "market": "美国证券交易所"
+    }
+  ],
+  "微软": [
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 5.0,
+      "code": "MSFT",
+      "market": "美国证券交易所"
+    },
+    {
+      "fund": "银华海外数字经济",
+      "ratio": 3.64,
+      "code": "MSFT",
+      "market": "美国证券交易所"
+    }
+  ],
+  "Meta Platforms Inc Class A": [
+    {
+      "fund": "汇添富全球移动",
+      "ratio": 3.4799999999999995,
+      "code": "META",
+      "market": "美国证券交易所"
+    }
+  ],
+  "智谱": [
+    {
+      "fund": "广发全球精选",
+      "ratio": 5.1,
+      "code": "02513",
+      "market": "香港联合交易所"
+    }
+  ],
+  "网易云音乐": [
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 8.17,
+      "code": "09899",
+      "market": "香港联合交易所"
+    }
+  ],
+  "ASMPT": [
+    {
+      "fund": "富国全球科技互联",
+      "ratio": 6.29,
+      "code": "00522",
+      "market": "香港联合交易所"
+    }
+  ]
+};
+
+
+// ===== 股票最新涨幅数据（70只，数据日期：2026-04-24）=====
+window.STOCK_CHANGES = {"美光科技": 3.11, "台积电": 5.17, "康宁": 3.77, "谷歌-C": 1.35, "英伟达": 4.32, "Tower半导体": -0.36, "MKS Inc.": 0.15, "TTM科技": 12.05, "英特尔": 0.0, "阿斯麦": 2.81, "谷歌-A": 1.63, "博通": 0.67, "亚马逊": 3.49, "科磊": 6.59, "Sandisk Corporation": 6.16, "泛林集团": 3.57, "闪迪": 6.16, "宁德时代": 1.37, "美的集团": -0.24, "招商银行": -1.08, "工商银行": 0.0, "中信证券": -0.94, "国泰海通": -0.42, "华泰证券": -1.57, "阳光电源": -0.53, "贵州茅台": 2.78, "新易盛": -11.67, "Coherent Corp.": -0.47, "Onto Innovation, Inc.": 5.32, "Lumentum Holdings, Inc.": 4.1, "应用光电": 17.74, "西部数据": 0.22, "铠侠控股株式会社": -0.69, "奈飞": -0.41, "Ciena科技": 0.96, "唯亚威系统服务": 3.47, "先进能源工业": 1.25, "泰瑞达": 4.26, "迈威尔科技": -0.76, "源杰科技": 0.0, "寒武纪": 2.23, "超威半导体": 13.91, "中际旭创": -1.12, "AXT, Inc.": 1.18, "东山精密": 0.66, "胜宏科技": -4.93, "海力士半导体公司": 1.56, "三星电子": 0.0, "三星电子有限公司": 0.0, "阿里巴巴-W": 1.07, "欢聚": 0.0, "智邦科技": -1.08, "LG Energy Solution Ltd": 3.10825, "LG新能源": -1.43737, "中芯国际": 4.7, "华虹半导体": 12.31, "德州仪器": -1.8, "应用材料": 0.0, "腾讯控股": -0.36, "State Bank of India Sponsored GDR RegS": 1.39, "Reliance Industries Ltd Sponsored GDR 144A": -0.12, "伊塔乌联合银行控股公司": -0.69, "HDFC银行": 0.55, "苹果": -0.87, "特斯拉": 0.69, "微软": 0.0, "Meta Platforms Inc Class A": 2.41, "智谱": -9.05, "网易云音乐": -0.75, "ASMPT": 6.93};
+
+// ===== 搜索功能 =====
+function doSearch() {
+  const q = document.getElementById('srchInput').value.trim();
+  if (!q) return;
+  clearHighlights();
+
+  const matches = [];
+  for (const [sname, funds] of Object.entries(STOCK_DATA)) {
+    if (sname.includes(q)) {
+      matches.push({name: sname, funds: funds});
+    }
+  }
+
+  const resultDiv = document.getElementById('srchResult');
+
+  if (matches.length === 0) {
+    resultDiv.innerHTML = '<span style="color:#f87171">未找到匹配"' + q + '"的股票，请尝试其他名称</span>';
+    return;
+  }
+
+  // 按总持仓占比排序
+  matches.sort(function(a, b) {
+    const aTotal = a.funds.reduce(function(s, f) { return s + f.ratio; }, 0);
+    const bTotal = b.funds.reduce(function(s, f) { return s + f.ratio; }, 0);
+    return bTotal - aTotal;
+  });
+
+  if (matches.length === 1) {
+    showStockPopup(matches[0].name, matches[0].funds);
+    resultDiv.innerHTML = '找到股票：<b style="color:#4da3ff">' + matches[0].name + '</b>，已在 ' + matches[0].funds.length + ' 只基金中高亮';
+  } else {
+    let html = '找到 ' + matches.length + ' 只匹配股票：';
+    matches.forEach(function(m) {
+      // 使用 data attr + 事件委托，避免 onclick 引号问题
+      html += '<a href="javascript:void(0)" class="stock-link" data-stock="' + m.name + '" style="margin-right:10px;color:#4da3ff">' + m.name + '</a> ';
+    });
+    resultDiv.innerHTML = html;
+  }
+
+  // 高亮表格行
+  matches.forEach(function(m) {
+    const sname = m.name;
+    document.querySelectorAll('.sname').forEach(function(td) {
+      if (td.textContent.trim() === sname) {
+        td.closest('tr').classList.add('highlight');
+      }
+    });
+  });
+}
+
+function clearHighlights() {
+  document.querySelectorAll('.highlight').forEach(function(el) { el.classList.remove('highlight'); });
+  document.getElementById('srchResult').innerHTML = '';
+}
+
+function clearSearch() {
+  document.getElementById('srchInput').value = '';
+  clearHighlights();
+  closePopup();
+}
+
+// ===== 弹窗 =====
+function showStockPopup(sname, funds) {
+  const popup = document.getElementById('stockPopup');
+  document.getElementById('popupTitle').textContent = sname + ' — 在QDII基金中的持仓分布';
+  const sorted = funds.slice().sort(function(a, b) { return b.ratio - a.ratio; });
+  let tbody = '';
+  sorted.forEach(function(f) {
+    let rClass = f.ratio >= 5 ? 'r-high' : (f.ratio >= 2 ? 'r-med' : 'r-low');
+    let market = f.market || '';
+    let mtag = '';
+    if (market.includes('香港')) mtag = '<span class="mtag hk">港股</span>';
+    else if (market.includes('美国')) mtag = '<span class="mtag us">美股</span>';
+    else if (market.includes('深圳') || market.includes('上海')) mtag = '<span class="mtag cn">A股</span>';
+    else mtag = '<span class="mtag other">其他</span>';
+    tbody += '<tr><td style="color:#e0e0e0;font-weight:600">' + f.fund + '</td><td class="' + rClass + '">' + f.ratio.toFixed(2) + '%</td><td class="scode">' + (f.code||'') + '</td><td>' + mtag + '</td></tr>';
+  });
+  document.getElementById('popupBody').innerHTML = tbody;
+  popup.classList.add('show');
+}
+
+function closePopup() {
+  document.getElementById('stockPopup').classList.remove('show');
+}
+
+// ===== 事件绑定（DOMContentLoaded 后）=====
+document.addEventListener('DOMContentLoaded', function() {
+  // 搜索按钮点击
+  var btn = document.querySelector('.srch-btn');
+  if (btn) btn.addEventListener('click', doSearch);
+
+  // 回车搜索
+  document.getElementById('srchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  // 点击股票链接（事件委托，处理动态生成的链接）
+  document.getElementById('srchResult').addEventListener('click', function(e) {
+    if (e.target.classList.contains('stock-link')) {
+      e.preventDefault();
+      var sname = e.target.getAttribute('data-stock');
+      document.getElementById('srchInput').value = sname;
+      doSearch();
+    }
+  });
+
+  // 点击表格中的股票名称
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('sname')) {
+      var name = e.target.textContent.trim();
+      document.getElementById('srchInput').value = name;
+      doSearch();
+    }
+  });
+
+  // 点击弹窗背景关闭
+  document.getElementById('stockPopup').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+});
+
+  // ===== 动态添加涨幅列 =====
+  function renderChangeColumn() {
+    var changes = window.STOCK_CHANGES || {};
+    document.querySelectorAll('.htable').forEach(function(table) {
+      // 表头添加涨幅列
+      var thead = table.querySelector('thead tr');
+      if (thead && !thead.querySelector('.chg-header')) {
+        var th = document.createElement('th');
+        th.className = 'chg-header';
+        th.textContent = '最新涨幅';
+        th.style.cssText = 'color:#f59e0b;font-size:11px';
+        thead.appendChild(th);
+      }
+      // 每行添加涨幅数据
+      table.querySelectorAll('tbody tr').forEach(function(tr) {
+        if (tr.querySelector('.chg-cell')) return; // 已添加
+        var sname = '';
+        var nameTd = tr.querySelector('.sname');
+        if (nameTd) sname = nameTd.textContent.trim();
+        var td = document.createElement('td');
+        td.className = 'chg-cell';
+        td.style.cssText = 'font-weight:700;font-size:13px;text-align:center';
+        if (sname && changes[sname] !== undefined) {
+          var chg = changes[sname];
+          // 中国A股惯例：涨红跌绿
+          if (chg > 0) {
+            td.style.color = '#f04b4b';
+            td.textContent = '+' + chg.toFixed(2) + '%';
+          } else if (chg < 0) {
+            td.style.color = '#28a745';
+            td.textContent = chg.toFixed(2) + '%';
+          } else {
+            td.style.color = '#6b7280';
+            td.textContent = '0.00%';
+          }
+        } else {
+          td.style.color = '#6b7280';
+          td.textContent = '—';
+        }
+        tr.appendChild(td);
+      });
+    });
+    // 更新数据时间说明
+    var src = document.querySelector('.sub');
+    if (src && !src.dataset.updated) {
+      src.dataset.updated = '1';
+      src.textContent += ' · 个股涨幅数据：2026-04-24 美股收盘';
+    }
+  }
+  renderChangeColumn();
+
+</script>
+</body>
+</html>
